@@ -325,6 +325,8 @@ void usbd_msc_read_sect(uint32_t sector, uint8_t *buf, uint32_t num_of_sectors)
 
 void usbd_msc_write_sect(uint32_t sector, uint8_t *buf, uint32_t num_of_sectors)
 {
+	//vfs_mngr_printf("usbd_msc_write_sect\n");
+	//vfs_mngr_printf("11\n");
     sync_assert_usb_thread();
 
     if (!USBD_MSC_MediaReady) {
@@ -341,11 +343,14 @@ void usbd_msc_write_sect(uint32_t sector, uint8_t *buf, uint32_t num_of_sectors)
     }
 
     // indicate msc activity
+		//vfs_mngr_printf("12\n");
     main_blink_msc_led(MAIN_LED_FLASH);
     vfs_write(sector, buf, num_of_sectors);
     if (TRASNFER_FINISHED == file_transfer_state.transfer_state) {
         return;
     }
+		
+		vfs_mngr_printf("13\n");
     file_data_handler(sector, buf, num_of_sectors);
 }
 
@@ -431,6 +436,9 @@ static void file_change_handler(const vfs_filename_t filename, vfs_file_change_t
             transfer_reset_file_info();
         }
     }
+		
+		    vfs_mngr_printf("vfs_manager file_change_handler EXIT \n ");
+ 
 }
 
 // Handler for file data arriving over USB.  This function is responsible
@@ -618,6 +626,9 @@ static void transfer_update_file_info(vfs_file_t file, uint32_t start_sector, ui
     vfs_mngr_printf("    updated size=%i\r\n", size);
 
     transfer_update_state(ERROR_SUCCESS);
+		
+		vfs_mngr_printf("vfs_manager transfer_update_file_info EXIT \n");
+
 }
 
 // Reset the transfer information or error if transfer is already in progress

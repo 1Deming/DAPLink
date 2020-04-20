@@ -642,3 +642,24 @@ projects:
         - *module_if
         - *module_hic_lpc4322
         - records/board/hani_iot.yaml
+    
+    #new board . April 9, 2020
+    stm32f103xb_stm32f103c8_if:
+        - *module_if
+        - *module_hic_stm32f103xb
+        - records/board/stm32f103c8.yaml
+
+    stm32f103xb_stm32f767ig_if:
+        - *module_if
+        - *module_hic_stm32f103xb
+        - records/board/stm32f767ig.yaml
+
+    stm32f103xb_stm32l031k6t6_if:
+        - *module_if
+        - *module_hic_stm32f103xb
+        - records/board/stm32l031k6t6.yaml
+
+    stm32f103xb_stm32l152vct6_if:
+        - *module_if
+        - *module_hic_stm32f103xb
+        - records/board/stm32l152vct6.yaml       

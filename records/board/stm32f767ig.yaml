@@ -1,0 +1,6 @@
+common:
+    sources:
+        board:
+            - source/board/stm32f767ig.c
+        family:
+            - source/family/st/stm32f767ig/target.c

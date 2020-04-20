@@ -30,6 +30,16 @@
 #include "compiler.h"
 #include "validation.h"
 
+// Set to 1 to enable debugging
+#define DEBUG_FILE_STREAM     1
+
+#if DEBUG_FILE_STREAM
+#include "daplink_debug.h"
+#define file_stream_printf    debug_msg
+#else
+#define file_stream_printf(...)
+#endif
+
 typedef enum {
     STREAM_STATE_CLOSED,
     STREAM_STATE_OPEN,
@@ -218,6 +228,9 @@ static error_t open_bin(void *state)
 
 static error_t write_bin(void *state, const uint8_t *data, uint32_t size)
 {
+	
+		file_stream_printf("write_bin \n");
+	
     error_t status;
     bin_state_t *bin_state = (bin_state_t *)state;
 
@@ -294,6 +307,7 @@ static bool detect_hex(const uint8_t *data, uint32_t size)
 
 static error_t open_hex(void *state)
 {
+	file_stream_printf("open_hex\n");
     error_t status;
     hex_state_t *hex_state = (hex_state_t *)state;
     memset(hex_state, 0, sizeof(*hex_state));
@@ -305,6 +319,7 @@ static error_t open_hex(void *state)
 
 static error_t write_hex(void *state, const uint8_t *data, uint32_t size)
 {
+		file_stream_printf("write_hex\n");
     error_t status = ERROR_SUCCESS;
     hex_state_t *hex_state = (hex_state_t *)state;
     hexfile_parse_status_t parse_status = HEX_PARSE_UNINIT;
@@ -360,6 +375,7 @@ static error_t write_hex(void *state, const uint8_t *data, uint32_t size)
 
 static error_t close_hex(void *state)
 {
+	file_stream_printf("close_hex\n");
     error_t status;
     status = flash_decoder_close();
     return status;

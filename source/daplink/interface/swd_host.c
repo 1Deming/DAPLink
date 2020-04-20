@@ -31,6 +31,16 @@
 #include "target_family.h"
 #include "device.h"
 
+// Set to 1 to enable debugging
+#define DEBUG_SWD_HOST     1
+
+#if DEBUG_SWD_HOST
+#include "daplink_debug.h"
+#define swd_host_printf    debug_msg
+#else
+#define swd_host_printf(...)
+#endif
+
 // Default NVIC and Core debug base addresses
 // TODO: Read these addresses from ROM.
 #define NVIC_Addr    (0xe000e000)
@@ -565,6 +575,8 @@ uint8_t swd_write_memory(uint32_t address, uint8_t *data, uint32_t size)
 // Execute system call.
 static uint8_t swd_write_debug_state(DEBUG_STATE *state)
 {
+		//swd_host_printf("swd_write_debug_state \n");
+
     uint32_t i, status;
 
     if (!swd_write_dp(DP_SELECT, 0)) {
@@ -691,6 +703,8 @@ static uint8_t swd_wait_until_halted(void)
 
 uint8_t swd_flash_syscall_exec(const program_syscall_t *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, flash_algo_return_t return_type)
 {
+	  //swd_host_printf("swd_flash_syscall_exec \n");
+
     DEBUG_STATE state = {{0}, 0};
     // Call flash algorithm function on target and wait for result.
     state.r[0]     = arg1;                   // R0: Argument 1
@@ -703,6 +717,28 @@ uint8_t swd_flash_syscall_exec(const program_syscall_t *sysCallParam, uint32_t e
     state.r[15]    = entry;                        // PC: Entry Point
     state.xpsr     = 0x01000000;          // xPSR: T = 1, ISR = 0
 
+		switch(entry)
+		{
+			case 0x20000021:
+				swd_host_printf("F:I\n");
+				break;
+			case 0x2000005d:				
+				swd_host_printf("F:U\n");
+				break;
+			case 0x2000007b:				
+				swd_host_printf("F:EC\n" );
+				break;
+			case 0x200000b5:				
+				swd_host_printf("F:ES\n");
+				break;
+			case 0x200000ef:				
+				swd_host_printf("F:P\n");
+				break;
+			default:				
+				swd_host_printf("F:V\n");
+				break;
+		}
+		
     if (!swd_write_debug_state(&state)) {
         return 0;
     }

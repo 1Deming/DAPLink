@@ -356,9 +356,10 @@ void USBD_HID_Configure_Event(void)
  *                       USBD_EVT_OUT: Output Event
  *    Return Value:    None
  */
-
+#include "daplink_debug.h"
 void USBD_HID_EP_INT_Event(U32 event)
 {
+		//debug_msg("USBD_HID_EP_INT_Event\n");
     if (event & USBD_EVT_IN) {
         USBD_HID_EP_INTIN_Event(event);
     }

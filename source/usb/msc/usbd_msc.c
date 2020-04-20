@@ -234,11 +234,13 @@ void USBD_MSC_MemoryRead(void)
  *    Return Value:    None
  */
 
+#include "daplink_debug.h"
 void USBD_MSC_MemoryWrite(void)
 {
     U32 n;
-
+		//debug_msg("MW \n" );
     if (Block >= USBD_MSC_BlockCount) {
+			//debug_msg("1 \n" );
         BulkLen = 0;
         USBD_MSC_SetStallEP(usbd_msc_ep_bulkout);
         USBD_MSC_CSW.bStatus = CSW_CMD_PASSED;
@@ -246,6 +248,7 @@ void USBD_MSC_MemoryWrite(void)
     }
 
     if (!USBD_MSC_CheckMedia()) {
+			//debug_msg("2 \n" );
         BulkLen = 0;
     }
 
@@ -256,6 +259,7 @@ void USBD_MSC_MemoryWrite(void)
     }
 
     for (n = 0; n < BulkLen; n++) {
+			//debug_msg("3 \n" );
         USBD_MSC_BlockBuf[Offset + n] = USBD_MSC_BulkBuf[n];
     }
 
@@ -263,7 +267,9 @@ void USBD_MSC_MemoryWrite(void)
     Length -= BulkLen;
 
     if (BulkLen) {
+			//debug_msg("4 \n" );
         if ((Length == 0) && (Offset != 0)) {
+					//debug_msg("5 \n" );
             n = (Offset + (USBD_MSC_BlockSize - 1)) / USBD_MSC_BlockSize;
 
             if (n > USBD_MSC_BlockGroup) {
@@ -274,6 +280,7 @@ void USBD_MSC_MemoryWrite(void)
             Offset = 0;
             Block += n;
         } else if (Offset == USBD_MSC_BlockGroup * USBD_MSC_BlockSize) {
+					debug_msg("6 \n" );
             usbd_msc_write_sect(Block, USBD_MSC_BlockBuf, USBD_MSC_BlockGroup);
             Offset = 0;
             Block += USBD_MSC_BlockGroup;
@@ -1150,8 +1157,11 @@ void USBD_MSC_EP_BULKOUT_Event(U32 event)
  *    Return Value:    None
  */
 
+#include "daplink_debug.h"
 void USBD_MSC_EP_BULK_Event(U32 event)
 {
+		//debug_msg("USBD_MSC_EP_BULK_Event \n");
+	
     if (event & USBD_EVT_OUT) {
         USBD_MSC_EP_BULKOUT_Event(0);
     }

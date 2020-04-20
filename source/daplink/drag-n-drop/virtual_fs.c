@@ -27,6 +27,17 @@
 #include "compiler.h"
 #include "util.h"
 
+// Set to 1 to enable debugging
+#define DEBUG_VIRTUAL_FS     0
+
+#if DEBUG_VIRTUAL_FS
+#include "daplink_debug.h"
+#define virtual_fs_printf    debug_msg
+#else
+#define virtual_fs_printf(...)
+#endif
+
+
 // Virtual file system driver
 // Limitations:
 //   - files must be contiguous
@@ -632,8 +643,13 @@ static void write_dir(uint32_t sector_offset, const uint8_t *data, uint32_t num_
     uint32_t num_entries;
     uint32_t i;
 
+	    virtual_fs_printf("virtual_fs write_dir IN \n");
+ 
+	
     if ((sector_offset + num_sectors) * VFS_SECTOR_SIZE > sizeof(dir_current)) {
         // Trying to write too much of the root directory
+			virtual_fs_printf("virtual_fs write_dir : Trying to write too much of the root directory \n");
+ 
         util_assert(0);
         return;
     }
@@ -649,28 +665,39 @@ static void write_dir(uint32_t sector_offset, const uint8_t *data, uint32_t num_
         bool same_name;
 
         if (0 == memcmp(&old_entry[i], &new_entry[i], sizeof(FatDirectoryEntry_t))) {
+								virtual_fs_printf("virtual_fs write_dir : continue \n");
+ 
             continue;
         }
 
         // If were at this point then something has changed in the file
         same_name = (0 == memcmp(old_entry[i].filename, new_entry[i].filename, sizeof(new_entry[i].filename))) ? 1 : 0;
         // Changed
+				virtual_fs_printf("virtual_fs write_dir : Changed \n");
+ 
         file_change_cb(new_entry[i].filename, VFS_FILE_CHANGED, (vfs_file_t)&old_entry[i], (vfs_file_t)&new_entry[i]);
 
         // Deleted
         if (0xe5 == (uint8_t)new_entry[i].filename[0]) {
-            file_change_cb(old_entry[i].filename, VFS_FILE_DELETED, (vfs_file_t)&old_entry[i], (vfs_file_t)&new_entry[i]);
+          				virtual_fs_printf("virtual_fs write_dir : Deleted \n");
+   
+					file_change_cb(old_entry[i].filename, VFS_FILE_DELETED, (vfs_file_t)&old_entry[i], (vfs_file_t)&new_entry[i]);
             continue;
         }
 
         // Created
         if (!same_name && filename_valid(new_entry[i].filename)) {
-            file_change_cb(new_entry[i].filename, VFS_FILE_CREATED, (vfs_file_t)&old_entry[i], (vfs_file_t)&new_entry[i]);
+          		virtual_fs_printf("virtual_fs write_dir : Created \n");
+     
+					file_change_cb(new_entry[i].filename, VFS_FILE_CREATED, (vfs_file_t)&old_entry[i], (vfs_file_t)&new_entry[i]);
             continue;
         }
     }
 
     memcpy(&dir_current.f[start_index], data, num_sectors * VFS_SECTOR_SIZE);
+		
+			    virtual_fs_printf("virtual_fs write_dir EXIT \n");
+ 
 }
 
 static void file_change_cb_stub(const vfs_filename_t filename, vfs_file_change_t change, vfs_file_t file, vfs_file_t new_file_data)

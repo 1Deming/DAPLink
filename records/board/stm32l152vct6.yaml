@@ -1,0 +1,6 @@
+common:
+    sources:
+        board:
+            - source/board/stm32l152vct6.c
+        family:
+            - source/family/st/stm32l152vct6/target.c

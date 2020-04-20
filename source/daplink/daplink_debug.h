@@ -29,26 +29,35 @@
 #include "cmsis_os2.h"
 #include "rl_usb.h"
 #include "util.h"
+#include "uart.h"
 
+//#include <stm32l1xx.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #ifndef MSC_DEBUG
-//#define MSC_DEBUG
+#define MSC_DEBUG
 #endif
 
 #if defined (MSC_DEBUG)
+#define MSC_DEBUG_USB
 
 static const char error_msg[] = "\r\n<OVERFLOW>\r\n";
+
 
 static inline uint32_t daplink_debug(uint8_t *buf, uint32_t size)
 {
     uint32_t total_free;
     uint32_t write_free;
     uint32_t error_len = strlen(error_msg);
+		
+		#if defined (MSC_DEBUG_USB)
     total_free = USBD_CDC_ACM_DataFree();
-
+		#elif defined (MSC_DEBUG_USART)
+		total_free = uart_write_free();
+		#endif
+	
     if (total_free < error_len) {
         // No space
         return 0;
@@ -57,16 +66,25 @@ static inline uint32_t daplink_debug(uint8_t *buf, uint32_t size)
     // Size available for writing
     write_free = total_free - error_len;
     size = MIN(write_free, size);
+		
+		#if defined (MSC_DEBUG_USB)
     USBD_CDC_ACM_DataSend(buf, size);
-
+		#elif defined (MSC_DEBUG_USART)
+		uart_write_data(buf, size);
+		#endif
+		
     if (write_free == size) {
-        USBD_CDC_ACM_DataSend((uint8_t *)error_msg, error_len);
+        #if defined (MSC_DEBUG_USB)
+				USBD_CDC_ACM_DataSend((uint8_t *)error_msg, error_len);
+				#elif defined (MSC_DEBUG_USART)
+				uart_write_data((uint8_t *)error_msg, error_len);
+				#endif
     }
 
     return size;
 }
 
-static char daplink_debug_buf[128] = {0};
+static char daplink_debug_buf[1024] = {0};
 static inline uint32_t daplink_debug_print(const char *format, ...)
 {
     uint32_t ret;
