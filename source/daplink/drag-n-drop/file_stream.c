@@ -29,6 +29,7 @@
 #include "cmsis_os2.h"
 #include "compiler.h"
 #include "validation.h"
+#include "target_board.h"
 
 // Set to 1 to enable debugging
 #define DEBUG_FILE_STREAM     1
@@ -114,6 +115,7 @@ stream_type_t stream_start_identify(const uint8_t *data, uint32_t size)
 
     for (i = STREAM_TYPE_START; i < STREAM_TYPE_COUNT; i++) {
         if (stream[i].detect(data, size)) {
+					//file_stream_printf("stream: %d",i);
             return i;
         }
     }
@@ -132,6 +134,25 @@ stream_type_t stream_type_from_name(const vfs_filename_t filename)
     } else {
         return STREAM_TYPE_NONE;
     }
+}
+
+// Identify target MCU from its extension
+void identify_mcu_from_name(const vfs_filename_t filename)
+{		
+		file_stream_printf("identify_mcu_from_name .\n");
+    // file names must be in upper case
+    if (0 == strncmp("MASTER", &filename[0], 6)) {
+       set_targetMCU(MasterMCU);
+			 file_stream_printf("The target MCU is Master !\n");
+    } else if (0 == strncmp("SLAVER", &filename[0], 6)) {
+       set_targetMCU(SlaverMCU);
+			file_stream_printf("The target MCU is Slaver !\n");
+    } 
+		else
+		{
+			file_stream_printf("filename is %*s !\n",filename);
+		}
+
 }
 
 error_t stream_open(stream_type_t stream_type)

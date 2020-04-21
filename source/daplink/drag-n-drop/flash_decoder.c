@@ -31,7 +31,7 @@
 #include "target_board.h"
 
 // Set to 1 to enable debugging
-#define DEBUG_FLASH_DECODER     1
+#define DEBUG_FLASH_DECODER     0
 
 #if DEBUG_FLASH_DECODER
 #include "daplink_debug.h"
@@ -56,8 +56,23 @@ static uint32_t current_addr;
 static bool flash_initialized;
 static bool initial_addr_set;
 static bool flash_type_target_bin;
+static uint8_t TargetMCU;
 
 static bool flash_decoder_is_at_end(uint32_t addr, const uint8_t *data, uint32_t size);
+
+/*user coding*/
+/*set_target_cfg : (MasterMCU) or (SlaverMCU) */
+
+error_t set_targetMCU( uint8_t WhichMCU )
+{
+	if( WhichMCU == MasterMCU ||  WhichMCU == SlaverMCU )
+	{
+		TargetMCU = WhichMCU ;
+		return ERROR_SUCCESS;
+	}
+	
+	return ERROR_FAILURE;
+}
 
 flash_decoder_type_t flash_decoder_detect_type(const uint8_t *data, uint32_t size, uint32_t addr, bool addr_valid)
 {
@@ -141,6 +156,18 @@ error_t flash_decoder_get_flash(flash_decoder_type_t type, uint32_t addr, bool a
                 flash_intf_local = flash_intf_iap_protected;
             }
         } else if (FLASH_DECODER_TYPE_TARGET == type) {
+						
+						/*user coding*/
+						/*set_target_cfg : (MasterMCU) or (SlaverMCU) */
+						if( MasterMCU == TargetMCU )
+						{
+							set_target_cfg(MasterMCU);
+						}
+						else if( SlaverMCU  == TargetMCU )
+						{
+							set_target_cfg(SlaverMCU);
+						}
+						
             if (g_board_info.target_cfg) {
                 region_info_t * region = g_board_info.target_cfg->flash_regions;
                 for (; region->start != 0 || region->end != 0; ++region) {

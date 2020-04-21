@@ -48,6 +48,7 @@ error_t flash_decoder_get_flash(flash_decoder_type_t type, uint32_t addr, bool a
 error_t flash_decoder_open(void);
 error_t flash_decoder_write(uint32_t addr, const uint8_t *data, uint32_t size);
 error_t flash_decoder_close(void);
+error_t set_targetMCU( uint8_t WhichMCU );
 
 #ifdef __cplusplus
 }

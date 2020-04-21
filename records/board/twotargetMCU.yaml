@@ -1,0 +1,7 @@
+common:
+    sources:
+        board:
+            - source/board/twotargetMCU.c
+        family:
+            - source/family/st/twotargetMCU/target_l031.c
+            - source/family/st/twotargetMCU/target_l152.c

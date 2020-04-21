@@ -325,8 +325,8 @@ void usbd_msc_read_sect(uint32_t sector, uint8_t *buf, uint32_t num_of_sectors)
 
 void usbd_msc_write_sect(uint32_t sector, uint8_t *buf, uint32_t num_of_sectors)
 {
-	//vfs_mngr_printf("usbd_msc_write_sect\n");
-	//vfs_mngr_printf("11\n");
+	vfs_mngr_printf("usbd_msc_write_sect\n");
+	vfs_mngr_printf("11\n");
     sync_assert_usb_thread();
 
     if (!USBD_MSC_MediaReady) {
@@ -343,7 +343,7 @@ void usbd_msc_write_sect(uint32_t sector, uint8_t *buf, uint32_t num_of_sectors)
     }
 
     // indicate msc activity
-		//vfs_mngr_printf("12\n");
+		vfs_mngr_printf("12\n");
     main_blink_msc_led(MAIN_LED_FLASH);
     vfs_write(sector, buf, num_of_sectors);
     if (TRASNFER_FINISHED == file_transfer_state.transfer_state) {
@@ -410,6 +410,7 @@ static void file_change_handler(const vfs_filename_t filename, vfs_file_change_t
             uint32_t size = vfs_file_get_size(new_file_data);
             vfs_sector_t sector = vfs_file_get_start_sector(new_file_data);
             stream = stream_type_from_name(filename);
+						identify_mcu_from_name(filename);
             transfer_update_file_info(file, sector, size, stream);
         }
     }
@@ -423,6 +424,7 @@ static void file_change_handler(const vfs_filename_t filename, vfs_file_change_t
             // the same extension to keep track of transfer info in some cases.
             if (!(VFS_FILE_ATTR_HIDDEN & vfs_file_get_attr(new_file_data))) {
                 stream = stream_type_from_name(filename);
+								identify_mcu_from_name(filename);
                 uint32_t size = vfs_file_get_size(new_file_data);
                 vfs_sector_t sector = vfs_file_get_start_sector(new_file_data);
                 transfer_update_file_info(file, sector, size, stream);
@@ -445,6 +447,8 @@ static void file_change_handler(const vfs_filename_t filename, vfs_file_change_t
 // for detecting the start of a BIN/HEX file and performing programming
 static void file_data_handler(uint32_t sector, const uint8_t *buf, uint32_t num_of_sectors)
 {
+		vfs_mngr_printf("file_data_handler IN \n ");
+
     stream_type_t stream;
     uint32_t size;
 
@@ -453,7 +457,6 @@ static void file_data_handler(uint32_t sector, const uint8_t *buf, uint32_t num_
     if (!file_transfer_state.stream_started) {
         // look for file types we can program
         stream = stream_start_identify((uint8_t *)buf, VFS_SECTOR_SIZE * num_of_sectors);
-
         if (STREAM_TYPE_NONE != stream) {
             transfer_stream_open(stream, sector);
         }
@@ -501,9 +504,11 @@ static void file_data_handler(uint32_t sector, const uint8_t *buf, uint32_t num_
             transfer_update_state(ERROR_SUCCESS);
             return;
         }
+        transfer_stream_data(sector, buf, size);   //will write to taget MCU flash.
+	    }
+		
+		vfs_mngr_printf("file_data_handler EXIT \n ");
 
-        transfer_stream_data(sector, buf, size);
-    }
 }
 
 static bool ready_for_state_change(void)

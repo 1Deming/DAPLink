@@ -21,10 +21,11 @@
 
 #include <string.h>
 #include "target_board.h"
+#include "daplink_debug.h"
 
 // Default empty board info.
 __attribute__((weak))
-const board_info_t g_board_info = {
+board_info_t g_board_info = {
 		.info_version = kBoardInfoVersion,
 		.board_id = "0000",
 		.daplink_url_name =       "MBED    HTM",
@@ -51,6 +52,31 @@ uint16_t get_family_id(void)
     }
 }
 
+
+//change target MCU
+uint16_t set_target_cfg(uint8_t MCUID)
+{
+	debug_msg("set_target_cfg\n");
+	if( MasterMCU == MCUID )
+	{
+		memcpy(g_board_info.board_id,"0712",strlen("0712"));
+		g_board_info.target_cfg = &l152_target_device;	
+		
+	}
+	else if( SlaverMCU == MCUID )
+	{
+		memcpy(g_board_info.board_id,"0724",strlen("0724"));
+		g_board_info.target_cfg = &l031_target_device;	
+	}
+	else
+	{
+		return 0;
+	}
+	
+	//debug_msg("board_id is %*s\n",g_board_info.board_id);
+	
+	return 1;
+}
 #if (defined(__ICCARM__))
 #pragma optimize = none
 uint8_t flash_algo_valid(void)

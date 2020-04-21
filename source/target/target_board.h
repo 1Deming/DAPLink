@@ -40,6 +40,13 @@ enum _board_info_flags {
     kEnableUnderResetConnect = (1 << 1),    /*!< Enable under reset connection when enabling debug mode */
 };
 
+//
+enum MCUID {
+
+	MasterMCU =1,
+	SlaverMCU,
+	MaxMCU,
+};
 /*!
  * @brief Board customization info.
  *
@@ -79,7 +86,7 @@ typedef struct __attribute__((__packed__)) board_info {
 } board_info_t;
 
 //! @brief Information describing the board on which DAPLink is running.
-extern const board_info_t g_board_info;
+extern board_info_t g_board_info;
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,6 +104,10 @@ uint16_t get_family_id(void);
 
 //! @brief Whether the board has a valid flash algo.
 uint8_t flash_algo_valid(void);
+
+//! @brief identify the target MCU
+uint16_t set_target_cfg(uint8_t MCUID);
+
 
 //! @brief Returns the MSD HTML help filename or a default.
 static inline const char * get_daplink_url_name ( void ) { return ((g_board_info.daplink_url_name[0] != 0) ? g_board_info.daplink_url_name : "MBED    HTM"); }

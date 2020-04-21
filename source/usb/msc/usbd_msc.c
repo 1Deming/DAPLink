@@ -234,7 +234,7 @@ void USBD_MSC_MemoryRead(void)
  *    Return Value:    None
  */
 
-#include "daplink_debug.h"
+//#include "daplink_debug.h"
 void USBD_MSC_MemoryWrite(void)
 {
     U32 n;
@@ -280,7 +280,7 @@ void USBD_MSC_MemoryWrite(void)
             Offset = 0;
             Block += n;
         } else if (Offset == USBD_MSC_BlockGroup * USBD_MSC_BlockSize) {
-					debug_msg("6 \n" );
+					//debug_msg("6 \n" );
             usbd_msc_write_sect(Block, USBD_MSC_BlockBuf, USBD_MSC_BlockGroup);
             Offset = 0;
             Block += USBD_MSC_BlockGroup;

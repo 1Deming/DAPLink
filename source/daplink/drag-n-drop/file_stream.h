@@ -50,6 +50,9 @@ stream_type_t stream_start_identify(const uint8_t *data, uint32_t size);
 // Stateless function to identify a filestream by its name
 stream_type_t stream_type_from_name(const vfs_filename_t filename);
 
+// Identify target MCU from its extension
+void identify_mcu_from_name(const vfs_filename_t filename);
+
 error_t stream_open(stream_type_t stream_type);
 
 error_t stream_write(const uint8_t *data, uint32_t size);
