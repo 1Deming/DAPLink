@@ -25,6 +25,7 @@
 #include "stm32f1xx.h"
 #include "compiler.h"
 #include "daplink.h"
+#include "target_board.h"
 
 COMPILER_ASSERT(DAPLINK_HIC_ID == DAPLINK_HIC_ID_STM32F103XB);
 
@@ -49,23 +50,47 @@ COMPILER_ASSERT(DAPLINK_HIC_ID == DAPLINK_HIC_ID_STM32F103XB);
 #define POWER_EN_PIN                 GPIO_PIN_15
 #define POWER_EN_Bit                 15
 
+//// nRESET OUT Pin
+//#define nRESET_PIN_PORT              GPIOB
+//#define nRESET_PIN                   GPIO_PIN_0
+//#define nRESET_PIN_Bit               0
+
+////SWD
+//#define SWCLK_TCK_PIN_PORT           GPIOB
+//#define SWCLK_TCK_PIN                GPIO_PIN_13
+//#define SWCLK_TCK_PIN_Bit            13
+
+//#define SWDIO_OUT_PIN_PORT           GPIOB
+//#define SWDIO_OUT_PIN                GPIO_PIN_14
+//#define SWDIO_OUT_PIN_Bit            14
+
+//#define SWDIO_IN_PIN_PORT            GPIOB
+//#define SWDIO_IN_PIN                 GPIO_PIN_12
+//#define SWDIO_IN_PIN_Bit             12
+
+// tRESET OUT Pin
+extern GPIO_TypeDef *  tRESET_PIN_PORT  ;
+extern uint16_t tRESET_PIN      				;
+extern uint8_t tRESET_PIN_Bit      			;
+
 // nRESET OUT Pin
-#define nRESET_PIN_PORT              GPIOB
-#define nRESET_PIN                   GPIO_PIN_0
-#define nRESET_PIN_Bit               0
+extern GPIO_TypeDef *  nRESET_PIN_PORT 		;
+extern uint16_t nRESET_PIN      					;
+extern uint8_t nRESET_PIN_Bit      				;
 
 //SWD
-#define SWCLK_TCK_PIN_PORT           GPIOB
-#define SWCLK_TCK_PIN                GPIO_PIN_13
-#define SWCLK_TCK_PIN_Bit            13
+extern GPIO_TypeDef * SWCLK_TCK_PIN_PORT  ;
+extern uint16_t SWCLK_TCK_PIN           	;
+extern uint8_t SWCLK_TCK_PIN_Bit         	;
 
-#define SWDIO_OUT_PIN_PORT           GPIOB
-#define SWDIO_OUT_PIN                GPIO_PIN_14
-#define SWDIO_OUT_PIN_Bit            14
+extern GPIO_TypeDef * SWDIO_OUT_PIN_PORT 	;
+extern uint16_t SWDIO_OUT_PIN            	;
+extern uint8_t SWDIO_OUT_PIN_Bit         	;
 
-#define SWDIO_IN_PIN_PORT            GPIOB
-#define SWDIO_IN_PIN                 GPIO_PIN_12
-#define SWDIO_IN_PIN_Bit             12
+extern GPIO_TypeDef * SWDIO_IN_PIN_PORT  	;
+extern uint16_t SWDIO_IN_PIN             	;
+extern uint8_t SWDIO_IN_PIN_Bit          	;
+
 
 //LEDs
 //USB status LED
@@ -88,5 +113,6 @@ COMPILER_ASSERT(DAPLINK_HIC_ID == DAPLINK_HIC_ID_STM32F103XB);
 #define PIN_MSC_LED                  GPIO_PIN_9
 #define PIN_MSC_LED_Bit              9
 
+void set_master_swd_pin( uint8_t whichMCU );
 
 #endif

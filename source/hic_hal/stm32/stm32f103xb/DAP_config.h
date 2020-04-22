@@ -242,6 +242,11 @@ __STATIC_INLINE void PORT_SWD_SETUP(void)
     SWDIO_OUT_PIN_PORT->BSRR = SWDIO_OUT_PIN;
 
     pin_in_init(SWDIO_IN_PIN_PORT, SWDIO_IN_PIN_Bit, 1);
+	
+		//set this pin low, reset other MCU
+    pin_out_od_init(tRESET_PIN_PORT, tRESET_PIN_Bit);
+    tRESET_PIN_PORT->BRR = tRESET_PIN;
+
     // Set RESET HIGH
     pin_out_od_init(nRESET_PIN_PORT, nRESET_PIN_Bit);//TODO - fix reset logic
     nRESET_PIN_PORT->BSRR = nRESET_PIN;
@@ -256,6 +261,9 @@ __STATIC_INLINE void PORT_OFF(void)
     pin_in_init(SWCLK_TCK_PIN_PORT, SWCLK_TCK_PIN_Bit, 0);
     pin_in_init(SWDIO_OUT_PIN_PORT, SWDIO_OUT_PIN_Bit, 0);
     pin_in_init(SWDIO_IN_PIN_PORT, SWDIO_IN_PIN_Bit, 0);
+    pin_in_init(tRESET_PIN_PORT, tRESET_PIN_Bit, 0);
+    pin_in_init(nRESET_PIN_PORT, nRESET_PIN_Bit, 0);
+	
 }
 
 // SWCLK/TCK I/O pin -------------------------------------
@@ -521,6 +529,9 @@ __STATIC_INLINE void DAP_SETUP(void)
 
     pin_out_od_init(nRESET_PIN_PORT, nRESET_PIN_Bit);
     nRESET_PIN_PORT->BSRR = nRESET_PIN;
+
+    pin_out_od_init(tRESET_PIN_PORT, tRESET_PIN_Bit);
+    tRESET_PIN_PORT->BSRR = tRESET_PIN;
 
     pin_out_init(CONNECTED_LED_PORT, CONNECTED_LED_PIN_Bit);
     CONNECTED_LED_PORT->BSRR = CONNECTED_LED_PIN;

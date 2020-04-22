@@ -460,6 +460,7 @@ void main_task(void * arg)
 
 int main(void)
 {
+		//;
     // Explicitly set the vector table since the bootloader might not set
     // it to what we expect.
 #if DAPLINK_ROM_BL_SIZE > 0

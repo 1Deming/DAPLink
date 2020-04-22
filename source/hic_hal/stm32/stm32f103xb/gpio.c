@@ -124,8 +124,10 @@ void gpio_init(void)
     __HAL_RCC_AFIO_CLK_ENABLE();
     // Disable JTAG to free pins for other uses
     // Note - SWD is still enabled
-    __HAL_AFIO_REMAP_SWJ_NOJTAG();
+    //__HAL_AFIO_REMAP_SWJ_NOJTAG();
 
+		__HAL_AFIO_REMAP_SWJ_DISABLE();
+	
     USB_CONNECT_PORT_ENABLE();
     USB_CONNECT_OFF();
     GPIO_InitStructure.Pin = USB_CONNECT_PIN;

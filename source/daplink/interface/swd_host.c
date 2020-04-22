@@ -78,6 +78,13 @@ static SWD_CONNECT_TYPE reset_connect = CONNECT_NORMAL;
 static DAP_STATE dap_state;
 static uint32_t  soft_reset = SYSRESETREQ;
 
+static uint8_t  TargetID = MasterMCU;
+
+void set_targetMCU_id(uint8_t whichiMCU)
+{
+    TargetID = whichiMCU;
+}
+
 static uint32_t swd_get_apsel(uint32_t adr)
 {
     uint32_t apsel = target_get_apsel();
@@ -124,17 +131,28 @@ void swd_set_soft_reset(uint32_t soft_reset_type)
 
 uint8_t swd_init(void)
 {
+		if( MasterMCU == TargetID || SlaverMCU == TargetID )
+		{
+			set_master_swd_pin(TargetID);
+		}
+		else
+		{
+			TargetID = MasterMCU ;
+			set_master_swd_pin(TargetID);
+		}
     //TODO - DAP_Setup puts GPIO pins in a hi-z state which can
     //       cause problems on re-init.  This needs to be investigated
     //       and fixed.
     DAP_Setup();
     PORT_SWD_SETUP();
+		swd_host_printf("swd_init\n");
     return 1;
 }
 
 uint8_t swd_off(void)
 {
     PORT_OFF();
+		swd_host_printf("swd_off\n");
     return 1;
 }
 

@@ -30,6 +30,7 @@
 #include "compiler.h"
 #include "validation.h"
 #include "target_board.h"
+#include "swd_host.h"
 
 // Set to 1 to enable debugging
 #define DEBUG_FILE_STREAM     1
@@ -143,9 +144,11 @@ void identify_mcu_from_name(const vfs_filename_t filename)
     // file names must be in upper case
     if (0 == strncmp("MASTER", &filename[0], 6)) {
        set_targetMCU(MasterMCU);
+			 set_targetMCU_id(MasterMCU);
 			 file_stream_printf("The target MCU is Master !\n");
     } else if (0 == strncmp("SLAVER", &filename[0], 6)) {
        set_targetMCU(SlaverMCU);
+			 set_targetMCU_id(SlaverMCU);
 			file_stream_printf("The target MCU is Slaver !\n");
     } 
 		else
