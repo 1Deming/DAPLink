@@ -457,12 +457,19 @@ static void file_data_handler(uint32_t sector, const uint8_t *buf, uint32_t num_
     if (!file_transfer_state.stream_started) {
         // look for file types we can program
         stream = stream_start_identify((uint8_t *)buf, VFS_SECTOR_SIZE * num_of_sectors);
+				vfs_mngr_printf("stream_start_identify,data is \n",buf);
+				for(uint16_t i = 0 ; i < VFS_SECTOR_SIZE * num_of_sectors ;i ++ )
+				{
+					vfs_mngr_printf("%d ,",buf[i]);
+				}
+				vfs_mngr_printf("\n");
         if (STREAM_TYPE_NONE != stream) {
             transfer_stream_open(stream, sector);
         }
     }
 
     if (file_transfer_state.stream_started) {
+				vfs_mngr_printf("stream_started\n");
         // Ignore sectors coming before this file
         if (sector < file_transfer_state.start_sector) {
             return;

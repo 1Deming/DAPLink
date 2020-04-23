@@ -65,7 +65,7 @@ static bool flash_decoder_is_at_end(uint32_t addr, const uint8_t *data, uint32_t
 
 error_t set_targetMCU( uint8_t WhichMCU )
 {
-	if( WhichMCU == MasterMCU ||  WhichMCU == SlaverMCU )
+	if( (WhichMCU == MasterMCU )||  (WhichMCU == SlaverMCU ))
 	{
 		TargetMCU = WhichMCU ;
 		return ERROR_SUCCESS;

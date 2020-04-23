@@ -166,10 +166,17 @@ void gpio_init(void)
     GPIO_InitStructure.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(nRESET_PIN_PORT, &GPIO_InitStructure);
 
+    // reset button configured as gpio open drain output with a pullup
+    HAL_GPIO_WritePin(tRESET_PIN_PORT, tRESET_PIN, GPIO_PIN_SET);
+    GPIO_InitStructure.Pin = tRESET_PIN;
+    GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStructure.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(tRESET_PIN_PORT, &GPIO_InitStructure);
+
     // Turn on power to the board. When the target is unpowered
     // it holds the reset line low.
     HAL_GPIO_WritePin(POWER_EN_PIN_PORT, POWER_EN_PIN, GPIO_PIN_RESET);
-    GPIO_InitStructure.Pin = POWER_EN_PIN;
+    GPIO_InitStructure.Pin = POWER_EN_PIN;                                   
     GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
     HAL_GPIO_Init(POWER_EN_PIN_PORT, &GPIO_InitStructure);

@@ -56,7 +56,7 @@ uint16_t get_family_id(void)
 //change target MCU
 uint16_t set_target_cfg(uint8_t MCUID)
 {
-	debug_msg("set_target_cfg\n");
+//	debug_msg("set_target_cfg\n");
 	if( MasterMCU == MCUID )
 	{
 		memcpy(g_board_info.board_id,"0712",strlen("0712"));

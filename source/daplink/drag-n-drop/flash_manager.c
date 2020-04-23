@@ -27,7 +27,7 @@
 #include "settings.h"
 
 // Set to 1 to enable debugging
-#define DEBUG_FLASH_MANAGER     1
+#define DEBUG_FLASH_MANAGER     0
 
 #if DEBUG_FLASH_MANAGER
 #include "daplink_debug.h"

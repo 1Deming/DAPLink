@@ -32,7 +32,7 @@
 #include "device.h"
 
 // Set to 1 to enable debugging
-#define DEBUG_SWD_HOST     1
+#define DEBUG_SWD_HOST     0
 
 #if DEBUG_SWD_HOST
 #include "daplink_debug.h"
@@ -131,7 +131,7 @@ void swd_set_soft_reset(uint32_t soft_reset_type)
 
 uint8_t swd_init(void)
 {
-		if( MasterMCU == TargetID || SlaverMCU == TargetID )
+		if( (MasterMCU == TargetID) || (SlaverMCU == TargetID) )
 		{
 			set_master_swd_pin(TargetID);
 		}

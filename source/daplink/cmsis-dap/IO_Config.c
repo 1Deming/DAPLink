@@ -38,6 +38,8 @@ uint8_t SWDIO_OUT_PIN_Bit           = 	14;
 GPIO_TypeDef * SWDIO_IN_PIN_PORT    =   GPIOB;
 uint16_t SWDIO_IN_PIN               =  	GPIO_PIN_12;
 uint8_t SWDIO_IN_PIN_Bit            = 	12;
+
+
 #else
 
 // tRESET OUT Pin
@@ -52,8 +54,8 @@ uint8_t nRESET_PIN_Bit      				=  	13;
 
 //SWD
 GPIO_TypeDef * SWCLK_TCK_PIN_PORT   =  	GPIOA;
-uint16_t SWCLK_TCK_PIN           	 	=  	GPIO_PIN_15;
-uint8_t SWCLK_TCK_PIN_Bit          	=  	15;
+uint16_t SWCLK_TCK_PIN           	 	=  	GPIO_PIN_14;
+uint8_t SWCLK_TCK_PIN_Bit          	=  	14;
 
 GPIO_TypeDef * SWDIO_OUT_PIN_PORT   =   GPIOA;
 uint16_t SWDIO_OUT_PIN              =  	GPIO_PIN_3;
@@ -162,8 +164,8 @@ void set_master_swd_pin( uint8_t whichMCU )
 
 		//SWD
 		SWCLK_TCK_PIN_PORT   				=  	GPIOA;
-		SWCLK_TCK_PIN           	 	=  	GPIO_PIN_15;
-		SWCLK_TCK_PIN_Bit          	=  	15;
+		SWCLK_TCK_PIN           	 	=  	GPIO_PIN_14;
+		SWCLK_TCK_PIN_Bit          	=  	14;
 
 		SWDIO_OUT_PIN_PORT   				=   GPIOA;
 		SWDIO_OUT_PIN              	=  	GPIO_PIN_3;

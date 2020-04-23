@@ -249,7 +249,7 @@ __STATIC_INLINE void PORT_SWD_SETUP(void)
 
     // Set RESET HIGH
     pin_out_od_init(nRESET_PIN_PORT, nRESET_PIN_Bit);//TODO - fix reset logic
-    nRESET_PIN_PORT->BSRR = nRESET_PIN;
+    nRESET_PIN_PORT->BSRR = nRESET_PIN;	
 }
 
 /** Disable JTAG/SWD I/O Pins.
@@ -263,7 +263,6 @@ __STATIC_INLINE void PORT_OFF(void)
     pin_in_init(SWDIO_IN_PIN_PORT, SWDIO_IN_PIN_Bit, 0);
     pin_in_init(tRESET_PIN_PORT, tRESET_PIN_Bit, 0);
     pin_in_init(nRESET_PIN_PORT, nRESET_PIN_Bit, 0);
-	
 }
 
 // SWCLK/TCK I/O pin -------------------------------------
