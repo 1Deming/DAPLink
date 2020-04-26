@@ -80,7 +80,7 @@ static void clear_buffers(void)
 
 int32_t uart_initialize(void)
 {
-	#ifdef 0
+
     GPIO_InitTypeDef GPIO_InitStructure;
 
     CDC_UART->CR1 &= ~(USART_IT_TXE | USART_IT_RXNE);
@@ -114,7 +114,7 @@ int32_t uart_initialize(void)
     HAL_GPIO_Init(UART_RTS_PORT, &GPIO_InitStructure);
 
     NVIC_EnableIRQ(CDC_UART_IRQn);
-#endif
+
     return 1;
 }
 
@@ -136,7 +136,6 @@ int32_t uart_reset(void)
 
 int32_t uart_set_configuration(UART_Configuration *config)
 {
-	#ifdef 0
 
     UART_HandleTypeDef uart_handle;
     HAL_StatusTypeDef status;
@@ -198,7 +197,7 @@ int32_t uart_set_configuration(UART_Configuration *config)
     (void)status;
 
     CDC_UART->CR1 |= USART_IT_RXNE;
-#endif
+
     return 1;
 }
 

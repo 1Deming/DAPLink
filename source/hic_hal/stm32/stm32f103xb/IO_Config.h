@@ -95,23 +95,23 @@ extern uint8_t SWDIO_IN_PIN_Bit          	;
 //LEDs
 //USB status LED
 #define RUNNING_LED_PORT             GPIOA
-#define RUNNING_LED_PIN              GPIO_PIN_9
-#define RUNNING_LED_Bit              9
+#define RUNNING_LED_PIN              GPIO_PIN_1
+#define RUNNING_LED_Bit              1
 
 #define PIN_HID_LED_PORT             GPIOA
-#define PIN_HID_LED                  GPIO_PIN_9
-#define PIN_HID_LED_Bit              9
+#define PIN_HID_LED                  GPIO_PIN_1
+#define PIN_HID_LED_Bit              1
 
 //#define PIN_CDC_LED_PORT             GPIOA
 //#define PIN_CDC_LED                  GPIO_PIN_9
 //#define PIN_CDC_LED_Bit              9
-#define PIN_CDC_LED_PORT             GPIOB
-#define PIN_CDC_LED                  GPIO_PIN_5
-#define PIN_CDC_LED_Bit              5
+#define PIN_CDC_LED_PORT             GPIOA
+#define PIN_CDC_LED                  GPIO_PIN_1
+#define PIN_CDC_LED_Bit              1
 
 #define PIN_MSC_LED_PORT             GPIOA
-#define PIN_MSC_LED                  GPIO_PIN_9
-#define PIN_MSC_LED_Bit              9
+#define PIN_MSC_LED                  GPIO_PIN_1
+#define PIN_MSC_LED_Bit              1
 
 void set_master_swd_pin( uint8_t whichMCU );
 
